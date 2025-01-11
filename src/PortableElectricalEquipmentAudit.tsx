@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Formik, Form, Field, FieldArray } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
-import InputSelectField from "./InputSelectField";
+import InputSelectField from "./InputSelectField.tsx";
 import { areaTagdata, operators } from "./fakeData";
 
 const auditControlValvesData = areaTagdata.map((area) => ({

@@ -1,24 +1,32 @@
 import React, { useState } from "react";
-import AuditControlValves from "./AuditControlValves";
-import SteamTrapAuditList from "./SteamTrapAuditList";
-import PortableElectricalEquipmentAudit from "./PortableElectricalEquipmentAudit";
-import SealWaterAuditForm from "./SealWaterAuditForm";
-import RotaryEquipment from "./RotaryEquipment";
-import SafetyEquipmentAuditForm from "./SafetyEquipmentAuditForm";
-import SealWaterSupplyAudit from "./SealWaterSupplyAudit";
 
-// independent Forms
-import ReliefStreamAudit from "./independent/ReliefStreamAudit";
-import ElectricalAuditArea from "./independent/ElectricalAuditArea";
-import AuditOfEndBank from "./independent/AuditOfEndBank";
-import MechanicalAuditOfArea from "./independent/MechanicalAuditOfArea";
-import HoseInspectionForm from "./independent/HoseInspectionForm";
-import RoutineAreaHosesAudit from "./independent/RoutineAreaHosesAudit";
-import HouseKeepingCheckSheet from "./independent/HouseKeepingCheckSheet";
-export default function App() {
-	const [selectedForm, setSelectedForm] = useState("ReliefStreamAudit");
+// Import all form components
+import AuditControlValves from "./AuditControlValves.tsx";
+import SteamTrapAuditList from "./SteamTrapAuditList.tsx";
+import PortableElectricalEquipmentAudit from "./PortableElectricalEquipmentAudit.tsx";
+import SealWaterAuditForm from "./SealWaterAuditForm.tsx";
+import RotaryEquipment from "./RotaryEquipment.tsx";
+import SafetyEquipmentAuditForm from "./SafetyEquipmentAuditForm.tsx";
+import SealWaterSupplyAudit from "./SealWaterSupplyAudit.tsx";
+import ReliefStreamAudit from "./independent/ReliefStreamAudit.tsx";
+import ElectricalAuditArea from "./independent/ElectricalAuditArea.tsx";
+import AuditOfEndBank from "./independent/AuditOfEndBank.tsx";
+import MechanicalAuditOfArea from "./independent/MechanicalAuditOfArea.tsx";
+import HoseInspectionForm from "./independent/HoseInspectionForm.tsx";
+import RoutineAreaHosesAudit from "./independent/RoutineAreaHosesAudit.tsx";
+import HouseKeepingCheckSheet from "./independent/HouseKeepingCheckSheet.tsx";
 
-	const dependentforms = [
+// Define the type for form options
+interface FormOption {
+	value: string;
+	label: string;
+}
+
+const App: React.FC = () => {
+	const [selectedForm, setSelectedForm] = useState<string>("ReliefStreamAudit");
+
+	// Define the dependent and independent forms
+	const dependentForms: FormOption[] = [
 		{ value: "AuditControlValves", label: "Audit Control Valves Form" },
 		{
 			value: "PortableElectricalEquipmentAudit",
@@ -37,7 +45,7 @@ export default function App() {
 		{ value: "SafetyEquipmentAuditForm", label: "Safety Equipment Audit Form" },
 	];
 
-	const independentForms = [
+	const independentForms: FormOption[] = [
 		{ value: "ReliefStreamAudit", label: "Relief Stream Audit" },
 		{ value: "ElectricalAuditArea", label: "Electrical Audit Area" },
 		{ value: "AuditOfEndBank", label: "Audit of End Bank" },
@@ -48,7 +56,8 @@ export default function App() {
 	];
 
 	return (
-		<div style={{ padding: "20px" }}>
+		<div className="p-16">
+			{/* Dropdown to select a form */}
 			<div className="mb-4 w-72">
 				<label htmlFor="form-select" className="block text-sm font-medium mb-2">
 					Select a Form:
@@ -59,26 +68,35 @@ export default function App() {
 					onChange={(e) => setSelectedForm(e.target.value)}
 					className="p-2 border border-gray-300 rounded-md w-full"
 				>
-					{dependentforms.map((form) => (
+					{/* Render options for dependent forms */}
+					{dependentForms.map((form) => (
+						<option key={form.value} value={form.value}>
+							{form.label}
+						</option>
+					))}
+					{/* Render options for independent forms */}
+					{independentForms.map((form) => (
 						<option key={form.value} value={form.value}>
 							{form.label}
 						</option>
 					))}
 				</select>
 			</div>
+
+			{/* Conditionally render the selected form */}
+			{selectedForm === "AuditControlValves" && <AuditControlValves />}
 			{selectedForm === "PortableElectricalEquipmentAudit" && (
 				<PortableElectricalEquipmentAudit />
 			)}
-			{selectedForm === "SteamTrapAuditList" && <SteamTrapAuditList />}
-			{selectedForm === "AuditControlValves" && <AuditControlValves />}
 			{selectedForm === "SealWaterAuditForm" && <SealWaterAuditForm />}
 			{selectedForm === "RotaryEquipment" && <RotaryEquipment />}
 			{selectedForm === "SafetyEquipmentAuditForm" && (
 				<SafetyEquipmentAuditForm />
 			)}
 			{selectedForm === "SealWaterSupplyAudit" && <SealWaterSupplyAudit />}
+			{selectedForm === "SteamTrapAuditList" && <SteamTrapAuditList />}
 
-			{/* independent forms */}
+			{/* Independent Forms */}
 			{selectedForm === "ReliefStreamAudit" && <ReliefStreamAudit />}
 			{selectedForm === "ElectricalAuditArea" && <ElectricalAuditArea />}
 			{selectedForm === "AuditOfEndBank" && <AuditOfEndBank />}
@@ -88,4 +106,6 @@ export default function App() {
 			{selectedForm === "HouseKeepingCheckSheet" && <HouseKeepingCheckSheet />}
 		</div>
 	);
-}
+};
+
+export default App;

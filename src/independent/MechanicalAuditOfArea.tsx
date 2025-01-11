@@ -1,34 +1,31 @@
 import React from "react";
 import { Formik, Field, FieldArray, Form } from "formik";
 import * as Yup from "yup";
-import InputSelectField from "../InputSelectField";
+import InputSelectField from "../InputSelectField.tsx";
 import { operators } from "../fakeData";
 const validationSchema = Yup.object({
 	auditItems: Yup.array()
 		.of(
 			Yup.object({
-				description: Yup.string().required("Description is required"),
-				responsibilities: Yup.string().required(
-					"Responsibilities are required"
-				),
+				concern: Yup.string().required("concern is required"),
 			})
 		)
 		.min(1, "At least one item is required"),
 });
 
-const DynamicForm = () => {
+const MechanicalAuditOfArea = () => {
 	return (
 		<Formik
 			initialValues={{
 				group: "",
 				shift: "",
 				date: "",
-				auditItems: [{ description: "", responsibilities: "" }],
+				auditItems: [{ concern: "" }],
 				reaction: "",
 				pacCru: "",
-				bmSignature: "",
-				sruSignature: "",
-				ssmSignature: "",
+				solvent_recovery: "",
+				to_field: "",
+				shift_manager: "",
 			}}
 			validationSchema={validationSchema}
 			onSubmit={(values) => console.log("Form Values:", values)}
@@ -37,26 +34,9 @@ const DynamicForm = () => {
 				<Form className="p-4 space-y-6">
 					<h2 className="text-xl font-bold text-center">
 						{" "}
-						RELIEF STREAM AUDIT (D1-508 INLET STREAMS)
+						Mechanical Audit of Area{" "}
 					</h2>
-					<div className="grid grid-cols-3 gap-4">
-						<div>
-							<label className="block text-sm font-medium text-gray-700">
-								Shift Group
-							</label>
-							<Field
-								as="select"
-								name="group"
-								className="p-2 border border-gray-300 rounded-md w-full"
-							>
-								<option value="" disabled>
-									Select a group
-								</option>
-								<option value="Group A">Group A</option>
-								<option value="Group B">Group B</option>
-								<option value="Group C">Group C</option>
-							</Field>
-						</div>
+					<div className="grid grid-cols-2 gap-4">
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
 								Shift
@@ -74,6 +54,7 @@ const DynamicForm = () => {
 								<option value="Night">Night</option>
 							</Field>
 						</div>
+
 						<div>
 							<label
 								htmlFor="date"
@@ -97,8 +78,7 @@ const DynamicForm = () => {
 								{/* Header Row */}
 								<div className="flex items-center gap-4 ">
 									<div className="w-1/12 font-semibold">Sr. No</div>
-									<div className="w-8/12 font-semibold">Description</div>
-									<div className="w-3/12 font-semibold">Responsibilities</div>
+									<div className="w-11/12 font-semibold">concern</div>
 									<div className="w-1/12"></div>
 								</div>
 
@@ -115,38 +95,24 @@ const DynamicForm = () => {
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 										</div>
-										{/* Description */}
-										<div className="w-8/12">
+										{/* concern */}
+										<div className="w-10/12">
 											<Field
 												type="text"
-												name={`auditItems[${index}].description`}
-												placeholder="Description"
+												name={`auditItems[${index}].concern`}
+												placeholder="concern"
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 											{touched.auditItems &&
 												touched.auditItems[index] &&
-												errors.auditItems?.[index]?.description && (
+												errors.auditItems?.[index]?.concern && (
 													<div className="text-sm text-red-500">
-														{errors.auditItems[index].description}
+														{errors.auditItems[index].concern}
 													</div>
 												)}
 										</div>
 										{/* Responsibilities */}
-										<div className="w-3/12">
-											<Field
-												type="text"
-												name={`auditItems[${index}].responsibilities`}
-												placeholder="Responsibilities"
-												className="p-2 border border-gray-300 rounded-md w-full"
-											/>
-											{touched.auditItems &&
-												touched.auditItems[index] &&
-												errors.auditItems?.[index]?.responsibilities && (
-													<div className="text-sm text-red-500">
-														{errors.auditItems[index].responsibilities}
-													</div>
-												)}
-										</div>
+
 										{/* Remove Button */}
 										<div className="w-1/12 flex justify-end">
 											<button
@@ -163,9 +129,7 @@ const DynamicForm = () => {
 								<div className="flex justify-start ">
 									<button
 										type="button"
-										onClick={() =>
-											push({ description: "", responsibilities: "" })
-										}
+										onClick={() => push({ concern: "" })}
 										className="bg-primary text-white px-4 py-2 rounded hover:bg-info mt-4"
 									>
 										Add Row
@@ -197,7 +161,7 @@ const DynamicForm = () => {
 									htmlFor="pacCru"
 									className="block text-sm font-medium text-gray-700"
 								>
-									PAC/CRU
+									PAC/Dryer
 								</label>
 								<Field
 									name="pacCru"
@@ -209,58 +173,54 @@ const DynamicForm = () => {
 							</div>
 							<div className="w-full">
 								<label
-									htmlFor="bmSignature"
+									htmlFor="solvent_recovery"
 									className="block text-sm font-medium text-gray-700"
 								>
-									B/M Signature
+									Solvent Recovery
 								</label>
 
 								<Field
-									name="bmSignature"
+									name="solvent_recovery"
 									className="p-1 border border-gray-300 rounded-md w-full"
 								/>
-								{touched.bmSignature && errors.bmSignature && (
+								{touched.solvent_recovery && errors.solvent_recovery && (
 									<div className="text-danger text-sm">
-										{errors.bmSignature}
+										{errors.solvent_recovery}
 									</div>
 								)}
 							</div>
 							<div>
 								<label
-									htmlFor="sruSignature"
+									htmlFor="to_field"
 									className="block text-sm font-medium text-gray-700"
 								>
-									SRU Signature
+									T.O
 								</label>
 
 								<Field
-									name="sruSignature"
+									name="to_field"
 									className="p-1 border border-gray-300 rounded-md w-full"
 								/>
-								{touched.sruSignature && errors.sruSignature && (
-									<div className="text-danger text-sm">
-										{errors.sruSignature}
-									</div>
+								{touched.to_field && errors.to_field && (
+									<div className="text-danger text-sm">{errors.to_field}</div>
 								)}
 							</div>
 
 							<div>
 								<label
-									htmlFor="ssmSignature"
+									htmlFor="shift_manager"
 									className="block text-sm font-medium text-gray-700"
 								>
-									SSM Signature
+									SHIFT MANAGER
 								</label>
-
-								<Field
-									name="passmSignaturecCru"
-									className="p-1 border border-gray-300 rounded-md w-full"
+								<InputSelectField
+									operators={operators}
+									values={values}
+									setFieldValue={setFieldValue}
+									id="shift_manager"
+									errors={errors}
+									touched={touched}
 								/>
-								{touched.ssmSignature && errors.ssmSignature && (
-									<div className="text-danger text-sm">
-										{errors.ssmSignature}
-									</div>
-								)}
 							</div>
 						</div>
 					</div>
@@ -278,4 +238,4 @@ const DynamicForm = () => {
 	);
 };
 
-export default DynamicForm;
+export default MechanicalAuditOfArea;

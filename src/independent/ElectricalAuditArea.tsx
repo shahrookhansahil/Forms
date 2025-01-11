@@ -1,7 +1,7 @@
 import React from "react";
 import { Formik, Field, FieldArray, Form } from "formik";
 import * as Yup from "yup";
-import InputSelectField from "../InputSelectField";
+import InputSelectField from "../InputSelectField.tsx";
 import { operators } from "../fakeData";
 const validationSchema = Yup.object({
 	auditItems: Yup.array()

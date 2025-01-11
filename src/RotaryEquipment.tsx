@@ -3,7 +3,7 @@ import { Formik, Form, Field, FieldArray } from "formik";
 import Select from "react-select";
 import * as Yup from "yup";
 import { equipmentData, operators } from "./fakeData";
-import InputSelectField from "./InputSelectField";
+import InputSelectField from "./InputSelectField.tsx";
 const RotaryEquipment = () => {
 	const [selectedAreas, setSelectedAreas] = useState([]);
 

@@ -1,31 +1,32 @@
 import React from "react";
 import { Formik, Field, FieldArray, Form } from "formik";
 import * as Yup from "yup";
-import InputSelectField from "../InputSelectField";
-import { operators } from "../fakeData";
 const validationSchema = Yup.object({
 	auditItems: Yup.array()
 		.of(
 			Yup.object({
-				concern: Yup.string().required("concern is required"),
+				description: Yup.string().required("Description is required"),
+				responsibilities: Yup.string().required(
+					"Responsibilities are required"
+				),
 			})
 		)
 		.min(1, "At least one item is required"),
 });
 
-const MechanicalAuditOfArea = () => {
+const DynamicForm = () => {
 	return (
 		<Formik
 			initialValues={{
 				group: "",
 				shift: "",
 				date: "",
-				auditItems: [{ concern: "" }],
+				auditItems: [{ description: "", responsibilities: "" }],
 				reaction: "",
 				pacCru: "",
-				solvent_recovery: "",
-				to_field: "",
-				shift_manager: "",
+				bmSignature: "",
+				sruSignature: "",
+				ssmSignature: "",
 			}}
 			validationSchema={validationSchema}
 			onSubmit={(values) => console.log("Form Values:", values)}
@@ -34,9 +35,26 @@ const MechanicalAuditOfArea = () => {
 				<Form className="p-4 space-y-6">
 					<h2 className="text-xl font-bold text-center">
 						{" "}
-						Mechanical Audit of Area{" "}
+						RELIEF STREAM AUDIT (D1-508 INLET STREAMS)
 					</h2>
-					<div className="grid grid-cols-2 gap-4">
+					<div className="grid grid-cols-3 gap-4">
+						<div>
+							<label className="block text-sm font-medium text-gray-700">
+								Shift Group
+							</label>
+							<Field
+								as="select"
+								name="group"
+								className="p-2 border border-gray-300 rounded-md w-full"
+							>
+								<option value="" disabled>
+									Select a group
+								</option>
+								<option value="Group A">Group A</option>
+								<option value="Group B">Group B</option>
+								<option value="Group C">Group C</option>
+							</Field>
+						</div>
 						<div>
 							<label className="block text-sm font-medium text-gray-700">
 								Shift
@@ -54,7 +72,6 @@ const MechanicalAuditOfArea = () => {
 								<option value="Night">Night</option>
 							</Field>
 						</div>
-
 						<div>
 							<label
 								htmlFor="date"
@@ -78,7 +95,8 @@ const MechanicalAuditOfArea = () => {
 								{/* Header Row */}
 								<div className="flex items-center gap-4 ">
 									<div className="w-1/12 font-semibold">Sr. No</div>
-									<div className="w-11/12 font-semibold">concern</div>
+									<div className="w-8/12 font-semibold">Description</div>
+									<div className="w-3/12 font-semibold">Responsibilities</div>
 									<div className="w-1/12"></div>
 								</div>
 
@@ -95,24 +113,38 @@ const MechanicalAuditOfArea = () => {
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 										</div>
-										{/* concern */}
-										<div className="w-10/12">
+										{/* Description */}
+										<div className="w-8/12">
 											<Field
 												type="text"
-												name={`auditItems[${index}].concern`}
-												placeholder="concern"
+												name={`auditItems[${index}].description`}
+												placeholder="Description"
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 											{touched.auditItems &&
 												touched.auditItems[index] &&
-												errors.auditItems?.[index]?.concern && (
+												errors.auditItems?.[index]?.description && (
 													<div className="text-sm text-red-500">
-														{errors.auditItems[index].concern}
+														{errors.auditItems[index].description}
 													</div>
 												)}
 										</div>
 										{/* Responsibilities */}
-
+										<div className="w-3/12">
+											<Field
+												type="text"
+												name={`auditItems[${index}].responsibilities`}
+												placeholder="Responsibilities"
+												className="p-2 border border-gray-300 rounded-md w-full"
+											/>
+											{touched.auditItems &&
+												touched.auditItems[index] &&
+												errors.auditItems?.[index]?.responsibilities && (
+													<div className="text-sm text-red-500">
+														{errors.auditItems[index].responsibilities}
+													</div>
+												)}
+										</div>
 										{/* Remove Button */}
 										<div className="w-1/12 flex justify-end">
 											<button
@@ -129,7 +161,9 @@ const MechanicalAuditOfArea = () => {
 								<div className="flex justify-start ">
 									<button
 										type="button"
-										onClick={() => push({ concern: "" })}
+										onClick={() =>
+											push({ description: "", responsibilities: "" })
+										}
 										className="bg-primary text-white px-4 py-2 rounded hover:bg-info mt-4"
 									>
 										Add Row
@@ -161,7 +195,7 @@ const MechanicalAuditOfArea = () => {
 									htmlFor="pacCru"
 									className="block text-sm font-medium text-gray-700"
 								>
-									PAC/Dryer
+									PAC/CRU
 								</label>
 								<Field
 									name="pacCru"
@@ -173,54 +207,58 @@ const MechanicalAuditOfArea = () => {
 							</div>
 							<div className="w-full">
 								<label
-									htmlFor="solvent_recovery"
+									htmlFor="bmSignature"
 									className="block text-sm font-medium text-gray-700"
 								>
-									Solvent Recovery
+									B/M Signature
 								</label>
 
 								<Field
-									name="solvent_recovery"
+									name="bmSignature"
 									className="p-1 border border-gray-300 rounded-md w-full"
 								/>
-								{touched.solvent_recovery && errors.solvent_recovery && (
+								{touched.bmSignature && errors.bmSignature && (
 									<div className="text-danger text-sm">
-										{errors.solvent_recovery}
+										{errors.bmSignature}
 									</div>
 								)}
 							</div>
 							<div>
 								<label
-									htmlFor="to_field"
+									htmlFor="sruSignature"
 									className="block text-sm font-medium text-gray-700"
 								>
-									T.O
+									SRU Signature
 								</label>
 
 								<Field
-									name="to_field"
+									name="sruSignature"
 									className="p-1 border border-gray-300 rounded-md w-full"
 								/>
-								{touched.to_field && errors.to_field && (
-									<div className="text-danger text-sm">{errors.to_field}</div>
+								{touched.sruSignature && errors.sruSignature && (
+									<div className="text-danger text-sm">
+										{errors.sruSignature}
+									</div>
 								)}
 							</div>
 
 							<div>
 								<label
-									htmlFor="shift_manager"
+									htmlFor="ssmSignature"
 									className="block text-sm font-medium text-gray-700"
 								>
-									SHIFT MANAGER
+									SSM Signature
 								</label>
-								<InputSelectField
-									operators={operators}
-									values={values}
-									setFieldValue={setFieldValue}
-									id="shift_manager"
-									errors={errors}
-									touched={touched}
+
+								<Field
+									name="passmSignaturecCru"
+									className="p-1 border border-gray-300 rounded-md w-full"
 								/>
+								{touched.ssmSignature && errors.ssmSignature && (
+									<div className="text-danger text-sm">
+										{errors.ssmSignature}
+									</div>
+								)}
 							</div>
 						</div>
 					</div>
@@ -238,4 +276,4 @@ const MechanicalAuditOfArea = () => {
 	);
 };
 
-export default MechanicalAuditOfArea;
+export default DynamicForm;

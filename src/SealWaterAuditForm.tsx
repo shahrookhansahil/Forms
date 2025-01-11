@@ -1,6 +1,6 @@
 import React from "react";
 import { Formik, Form, Field, FieldArray } from "formik";
-import InputSelectField from "./InputSelectField";
+import InputSelectField from "./InputSelectField.tsx";
 import { operators, equipmentWaterSupplyData } from "./fakeData";
 import Select from "react-select";
 

@@ -1,23 +1,43 @@
 import React from "react";
-import { Formik, Field, FieldArray, Form } from "formik";
+import { Formik, Field, FieldArray, Form, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import InputSelectField from "../InputSelectField";
+import InputSelectField from "../InputSelectField.tsx";
 import { operators } from "../fakeData";
+
+// Define types for the form values
+interface AuditItem {
+	concern: string;
+	isolationTag: string;
+	jobTag: string;
+}
+
+interface FormValues {
+	group: string;
+	shift: string;
+	date: string;
+	auditItems: AuditItem[];
+	reaction: string;
+	pacCru: string;
+	solvent_recovery: string;
+	to_field: string;
+	shift_manager: string;
+}
+
 const validationSchema = Yup.object({
 	auditItems: Yup.array()
 		.of(
 			Yup.object({
-				concern: Yup.string().required("concern is required"),
-				isolationTag: Yup.string().required("Isolation tag required"),
-				jobTag: Yup.string().required("Job tag required"),
+				concern: Yup.string().required("Concern is required"),
+				isolationTag: Yup.string().required("Isolation tag is required"),
+				jobTag: Yup.string().required("Job tag is required"),
 			})
 		)
 		.min(1, "At least one item is required"),
 });
 
-const AuditOfEndBank = () => {
+const AuditOfEndBank: React.FC = () => {
 	return (
-		<Formik
+		<Formik<FormValues>
 			initialValues={{
 				group: "",
 				shift: "",
@@ -30,12 +50,17 @@ const AuditOfEndBank = () => {
 				shift_manager: "",
 			}}
 			validationSchema={validationSchema}
-			onSubmit={(values) => console.log("Form Values:", values)}
+			onSubmit={(
+				values: FormValues,
+				{ setSubmitting }: FormikHelpers<FormValues>
+			) => {
+				console.log("Form Values:", values);
+				setSubmitting(false);
+			}}
 		>
 			{({ values, setFieldValue, errors, touched }) => (
 				<Form className="p-4 space-y-6">
 					<h2 className="text-xl font-bold text-center">
-						{" "}
 						Electrical Audit of Area Report
 					</h2>
 					<div className="grid grid-cols-2 gap-4">
@@ -77,20 +102,17 @@ const AuditOfEndBank = () => {
 					<FieldArray name="auditItems">
 						{({ remove, push }) => (
 							<div className="space-y-4 border border-gray-300 rounded-md p-2">
-								{/* Header Row */}
 								<div className="flex items-center gap-4 ">
 									<div className="w-1/12 font-semibold">Sr. No</div>
-									<div className="w-5/12 font-semibold">concern</div>
+									<div className="w-5/12 font-semibold">Concern</div>
 
 									<div className="w-3/12">Isolation Tag</div>
 									<div className="w-3/12">Job Tag</div>
 									<div className="w-1/12"></div>
 								</div>
 
-								{/* Dynamic Rows */}
 								{values.auditItems.map((item, index) => (
 									<div key={index} className="flex items-center gap-4 ">
-										{/* Sr. No */}
 										<div className="w-1/12">
 											<Field
 												type="text"
@@ -100,12 +122,11 @@ const AuditOfEndBank = () => {
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 										</div>
-										{/* concern */}
 										<div className="w-5/12">
 											<Field
 												type="text"
 												name={`auditItems[${index}].concern`}
-												placeholder="concern"
+												placeholder="Concern"
 												className="p-2 border border-gray-300 rounded-md w-full"
 											/>
 											{touched.auditItems &&
@@ -116,7 +137,6 @@ const AuditOfEndBank = () => {
 													</div>
 												)}
 										</div>
-										{/* Isolation Tag */}
 										<div className="w-3/12">
 											<Field
 												type="text"
@@ -132,7 +152,6 @@ const AuditOfEndBank = () => {
 													</div>
 												)}
 										</div>
-										{/* Job Tag */}
 										<div className="w-3/12">
 											<Field
 												type="text"
@@ -149,9 +168,6 @@ const AuditOfEndBank = () => {
 												)}
 										</div>
 
-										{/* Responsibilities */}
-
-										{/* Remove Button */}
 										<div className="w-1/12 flex justify-end">
 											<button
 												type="button"
